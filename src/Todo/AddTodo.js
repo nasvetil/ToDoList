@@ -5,12 +5,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
 import AddIcon from '@material-ui/icons/Add';
+import FlagIcon from '@material-ui/icons/Flag';
 
 const useStyles = makeStyles((theme) => ({
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
+  },
+  divider: {
+    height: 28,
+    margin: 4,
   }
 }));
 
@@ -28,15 +34,18 @@ function useInputValue(defaultValue = '') {
 }
 
 function AddTodo({ onCreate }) {
+  const [isImportant, setIsImportant] = useState(false);
   const input = useInputValue('');
 
   function submitHandler(event) {
     event.preventDefault()
 
     if (input.value().trim()) {
-      onCreate(input.value())
+      onCreate(input.value(), isImportant)
       input.clear()
     }
+
+    setIsImportant(false);
   }
 
   const classes = useStyles();
@@ -57,12 +66,23 @@ function AddTodo({ onCreate }) {
 
       {
         input.value().trim() ? (
-          <IconButton
-            type="submit" 
-            className=".add-task-block__icon-button" 
-            aria-label="add-task-button">
-            <AddIcon />
-          </IconButton>
+          <React.Fragment>
+            <IconButton
+              aria-label="is-important"
+              onClick={() => {
+                setIsImportant(!isImportant);
+              }}
+              color={isImportant ? ('primary') : ('action')}>
+              <FlagIcon />
+            </IconButton>
+            <Divider className={classes.divider} orientation="vertical" />
+            <IconButton
+              type="submit" 
+              className=".add-task-block__icon-button" 
+              aria-label="add-task-button">
+              <AddIcon />
+            </IconButton>
+          </React.Fragment>
         ) : null
       }
 

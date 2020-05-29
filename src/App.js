@@ -19,6 +19,17 @@ function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos])
 
+  function toggleIsImportantTodo(id) {
+    setTodos(
+      todos.map(todo => {
+        if (todo.id === id) {
+          todo.isImportant = !todo.isImportant
+        }
+        return todo;
+      })
+    )
+  }
+
   function toggleTodo(id) {
     setTodos(
       todos.map(todo => {
@@ -34,13 +45,14 @@ function App() {
     setTodos(todos.filter(todo=> todo.id !== id))
   }
 
-  function addTodo(title) {
+  function addTodo(title, isImportant) {
     setTodos(
       todos.concat([
         {
           title,
           id: Date.now(),
-          completed: false
+          completed: false,
+          isImportant: isImportant
         }
       ])
     )
@@ -54,7 +66,7 @@ function App() {
         <AddTodo onCreate={addTodo}/>
 
         {todos.length ? (
-          <TodoList todos={todos} onToggle={toggleTodo}/>
+          <TodoList todos={todos} onToggle={toggleTodo} onToggleIsImportantTodo={toggleIsImportantTodo}/>
         ) : (
           <p>Add your first task</p>
         )

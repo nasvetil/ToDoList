@@ -10,14 +10,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import FlagIcon from '@material-ui/icons/Flag';
 
-function TodoItem({ todo, index, onChange }) {
+function TodoItem({ todo, index, onToggle, onToggleIsImportantTodo }) {
   const { removeTodo } = useContext(Context);
   const [checked, setChecked] = React.useState([0]);
+  const [isImportant, setIsImportant] = React.useState(todo.isImportant);
   const classes = [];
 
   const handleToggle = (value) => () => {
-    onChange(todo.id);
+    onToggle(todo.id);
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -28,6 +30,11 @@ function TodoItem({ todo, index, onChange }) {
     }
 
     setChecked(newChecked);
+  };
+
+  const handleToggleIsImportant = () => () => {
+    onToggleIsImportantTodo(todo.id);
+    setIsImportant(!isImportant);
   };
 
   if (todo.completed) {
@@ -58,6 +65,12 @@ function TodoItem({ todo, index, onChange }) {
       />
 
       <ListItemSecondaryAction>
+        <IconButton
+          aria-label="is-important"
+          onClick={handleToggleIsImportant(index)}
+          color={isImportant ? ("primary") : ("action")}>
+          <FlagIcon />
+        </IconButton>
         <IconButton edge="end" onClick={() => removeTodo(todo.id)} aria-label="delete">
           <DeleteIcon color="error"/>
         </IconButton>
@@ -70,7 +83,8 @@ function TodoItem({ todo, index, onChange }) {
 TodoItem.propTypes = {
   todo: PropTypes.object.isRequired,
   index: PropTypes.number,
-  onChange: PropTypes.func.isRequired
+  onToggle: PropTypes.func.isRequired,
+  onToggleIsImportantTodo: PropTypes.func.isRequired
 }
 
 export default TodoItem;
