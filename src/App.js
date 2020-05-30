@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
 import Context from './context';
-import TodoList from './Todo/TodoList'
-import AddTodo from './Todo/AddTodo'
+import TodoList from './Todo/TodoList';
+import AddTodo from './Todo/AddTodo';
 
-import Container from '@material-ui/core/Container'
+import Container from '@material-ui/core/Container';
 
 function App() {
   const [todos, setTodos]= React.useState(() => {
@@ -19,26 +19,15 @@ function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos])
 
-  function toggleIsImportantTodo(id) {
+  function editTodo(id, key, value) {
     setTodos(
       todos.map(todo => {
         if (todo.id === id) {
-          todo.isImportant = !todo.isImportant
+          todo[key] = value;
         }
         return todo;
       })
-    )
-  }
-
-  function toggleTodo(id) {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          todo.completed = !todo.completed
-        }
-        return todo;
-      })
-    )
+    );
   }
 
   function removeTodo(id) {
@@ -59,14 +48,14 @@ function App() {
   }
 
   return (
-    <Context.Provider value={{removeTodo: removeTodo}}>
+    <Context.Provider value={{editTodo: editTodo, removeTodo: removeTodo}}>
       <Container maxWidth="sm">
         <h1>ToDoList</h1>
 
         <AddTodo onCreate={addTodo}/>
 
         {todos.length ? (
-          <TodoList todos={todos} onToggle={toggleTodo} onToggleIsImportantTodo={toggleIsImportantTodo}/>
+          <TodoList todos={todos}/>
         ) : (
           <p>Add your first task</p>
         )

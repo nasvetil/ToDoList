@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Context from '../context';
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -19,35 +19,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function TodoItem({ todo, index, onToggle, onToggleIsImportantTodo }) {
-  const { removeTodo } = useContext(Context);
-  const [checked, setChecked] = React.useState([0]);
+function TodoItem({ todo, index }) {
+  const { removeTodo, editTodo } = useContext(Context);
   const [isImportant, setIsImportant] = React.useState(todo.isImportant);
+  const [isChecked, setIsChecked] = React.useState(todo.completed);
+
   const classes = useStyles();
-  const classesText = [];
 
-  const handleToggle = (value) => () => {
-    onToggle(todo.id);
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+  const handleToggleChecked = () => () => {
+    editTodo(todo.id, 'completed', !isChecked)
+    setIsChecked(!isChecked);
   };
 
   const handleToggleIsImportant = () => () => {
-    onToggleIsImportantTodo(todo.id);
+    editTodo(todo.id, 'isImportant', !isImportant)
     setIsImportant(!isImportant);
   };
-
-  if (todo.completed) {
-    classesText.push('list__item--completed');
-  }
 
   return (
     <ListItem
@@ -55,9 +42,9 @@ function TodoItem({ todo, index, onToggle, onToggleIsImportantTodo }) {
       role={undefined}
       dense
       button
-      onClick={handleToggle(index)}
-      className={isImportant ? classes.isImportant : null}>
-
+      onClick={handleToggleChecked(index)}
+      className={isImportant ? classes.isImportant : null}
+    >
       <ListItemIcon>
         <Checkbox
           edge="start"
@@ -70,17 +57,22 @@ function TodoItem({ todo, index, onToggle, onToggleIsImportantTodo }) {
 
       <ListItemText
         id={`checkbox-list-label-${index}`}
-        primary={<span className={classesText.join(' ')}>{index + 1}. {todo.title}</span>}
+        primary={<span className={isChecked ? 'list__item--completed' : null}>{index + 1}. {todo.title}</span>}
       />
 
       <ListItemSecondaryAction>
         <IconButton
           aria-label="is-important"
           onClick={handleToggleIsImportant(index)}
-          color={isImportant ? ("primary") : ("action")}>
+          color={isImportant ? ("primary") : ("default")}
+        >
           <FlagIcon />
         </IconButton>
-        <IconButton edge="end" onClick={() => removeTodo(todo.id)} aria-label="delete">
+        <IconButton
+          edge="end"
+          onClick={() => removeTodo(todo.id)}
+          aria-label="delete"
+        >
           <DeleteIcon color="error"/>
         </IconButton>
       </ListItemSecondaryAction>
@@ -92,8 +84,6 @@ function TodoItem({ todo, index, onToggle, onToggleIsImportantTodo }) {
 TodoItem.propTypes = {
   todo: PropTypes.object.isRequired,
   index: PropTypes.number,
-  onToggle: PropTypes.func.isRequired,
-  onToggleIsImportantTodo: PropTypes.func.isRequired
 }
 
 export default TodoItem;
