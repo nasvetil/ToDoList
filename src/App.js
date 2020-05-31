@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import Context from './context';
-import TodoList from './Todo/TodoList';
+import TodoBlock from './Todo/TodoBlock';
 import AddTodo from './Todo/AddTodo';
 
 import Container from '@material-ui/core/Container';
@@ -52,7 +52,7 @@ function App() {
       <Container maxWidth="sm">
         <h1>ToDoList</h1>
         <AddTodo onCreate={addTodo}/>
-        <TodoList todos={todos}/>
+        <TodoBlock todos={todos}/>
       </Container>
     </Context.Provider>
   );

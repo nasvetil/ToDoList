@@ -72,7 +72,7 @@ function AddTodo({ onCreate }) {
               onClick={() => {
                 setIsImportant(!isImportant);
               }}
-              color={isImportant ? ('primary') : ('action')}>
+              color={isImportant ? ('primary') : ('default')}>
               <FlagIcon />
             </IconButton>
             <Divider className={classes.divider} orientation="vertical" />
