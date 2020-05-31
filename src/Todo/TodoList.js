@@ -3,14 +3,22 @@ import PropTypes from 'prop-types';
 
 import TodoItem from './TodoItem';
 
+import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import List from '@material-ui/core/List';
 
+const useStyles = makeStyles((theme) => ({
+  textCenter: {
+    textAlign: "center"
+  }
+}));
+
 function TodoList(props) {
   const [todoCategory, setTodoCategory] = React.useState(0);
+  const classes = useStyles();
 
   const handleChange = (event, newValue) => {
     setTodoCategory(newValue);
@@ -47,21 +55,28 @@ function TodoList(props) {
           />
         </Tabs>
       </AppBar>
-      <List>
-        {
-          todoFilter(props.todos).map((todo, index) => {
-            return (
-              <TodoItem 
-                todo={todo} 
-                key={todo.id} 
-                index={index} 
-              />
-            )
-          })
-        }
-      </List>
+      {
+        props.todos.length ? (
+          <List>
+          {
+            todoFilter(props.todos).map((todo, index) => {
+              return (
+                <TodoItem 
+                  todo={todo} 
+                  key={todo.id} 
+                  index={index} 
+                />
+              )
+            })
+          }
+          </List>
+        ) : (
+          <p className={classes.textCenter}>Please, add your first task</p>
+        )
+      }
+
     </Paper>
-  )
+  );
 }
 
 TodoList.propTypes = {

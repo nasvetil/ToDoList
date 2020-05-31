@@ -57,7 +57,7 @@ function TodoItem({ todo, index }) {
 
       <ListItemText
         id={`checkbox-list-label-${index}`}
-        primary={<span className={isChecked ? 'list__item--completed' : null}>{index + 1}. {todo.title}</span>}
+        primary={<span className={isChecked ? 'list__item--completed' : null}>{todo.title}</span>}
       />
 
       <ListItemSecondaryAction>
