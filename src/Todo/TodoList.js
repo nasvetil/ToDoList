@@ -37,8 +37,14 @@ function TodoList(props) {
           aria-label="disabled tabs example"
         >
           <Tab label="All" />
-          <Tab label="Active" />
-          <Tab label="Сompleted" />
+          <Tab
+            label="Active"
+            disabled={props.todos.length ? false : true}
+          />
+          <Tab
+            label="Сompleted"
+            disabled={props.todos.length ? false : true}
+          />
         </Tabs>
       </AppBar>
       <List>
