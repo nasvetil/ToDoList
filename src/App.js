@@ -47,8 +47,19 @@ function App() {
     )
   }
 
+  function removeCompletedTodos() {
+    setTodos(todos.filter((todo) => !todo.completed));
+  }
+
   return (
-    <Context.Provider value={{editTodo: editTodo, removeTodo: removeTodo}}>
+    <Context.Provider value={
+      {
+        editTodo: editTodo, 
+        removeTodo: removeTodo, 
+        removeCompletedTodos: removeCompletedTodos
+        }
+      }
+    >
       <Container maxWidth="sm">
         <h1>ToDoList</h1>
         <AddTodo onCreate={addTodo}/>
